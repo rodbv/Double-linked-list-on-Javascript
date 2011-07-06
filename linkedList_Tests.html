@@ -11,11 +11,13 @@
         $(document).ready(function () {
             test("new linked lists will have zero nodes", function () {
                 var ll = new LinkedList();
+                expect(1);
                 equals(0, ll.size());
             });
 
             test("linked list with one node will have size 1", function () {
                 var ll = new LinkedList();
+                expect(1);
                 ll.add("x");
                 equals(1, ll.size());
             });
@@ -23,48 +25,55 @@
             test("linked list with one node, getHead will return node", function () {
                 var ll = new LinkedList();
                 ll.add("x");
-                equals("x", ll.getHead().value);
+                expect(1);
+                equals("x", ll.getHead().getValue());
             });
 
             test("linked list with one node, getTail will return node", function () {
                 var ll = new LinkedList();
                 ll.add("x");
-                equals("x", ll.getTail().value);
+                expect(1);
+                equals("x", ll.getTail().getValue());
             });
 
             test("linked list with 2 nodes, size equals 2", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y");
+                expect(1);
                 equals(2, ll.size());
             });
 
             test("linked list with 2 nodes, head is first item added", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y");
-                equals("x", ll.getHead().value);
+                expect(1);
+                equals("x", ll.getHead().getValue());
             });
 
             test("linked list with 2 nodes, tail is the last item added", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y");
-                equals("y", ll.getTail().value);
+                expect(1);
+                equals("y", ll.getTail().getValue());
             });
 
             test("linked list with two nodes, head will point to tail", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y");
-                equals("x", ll.getHead().value);
-                equals("y", ll.getTail().value);
-                equals("y", ll.getHead().next.value);
+                expect(3);
+                equals("x", ll.getHead().getValue());
+                equals("y", ll.getTail().getValue());
+                equals("y", ll.getHead().getNext().getValue());
             });
 
             test("linked list with 3 nodes is consistent", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y").add("z");
-                equals("x", ll.getHead().value);
-                equals("z", ll.getTail().value);
-                equals("y", ll.getHead().next.value);
-                equals("y", ll.getTail().previous.value);
+                expect(5);
+                equals("x", ll.getHead().getValue());
+                equals("z", ll.getTail().getValue());
+                equals("y", ll.getHead().getNext().getValue());
+                equals("y", ll.getTail().getPrevious().getValue());
                 equals(3, ll.size());
             });
 
@@ -72,14 +81,16 @@
                 var ll = new LinkedList();
                 ll.add("x").add("y").add("z");
                 var nodeY = ll.findByValue("y");
-                equals("y", nodeY.value);
-                equals("x", nodeY.previous.value);
-                equals("z", nodeY.next.value);
+                expect(3);
+                equals("y", nodeY.getValue());
+                equals("x", nodeY.getPrevious().getValue());
+                equals("z", nodeY.getNext().getValue());
             });
 
             test("findByValue will return null if value is not in list", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y").add("z");
+                expect(1);
                 equals(null, ll.findByValue("dummy"));
             });
 
@@ -88,9 +99,10 @@
                 ll.add("x").add("y").add("z");
 
                 var nodeY = ll.findByValue("y");
-                equals("y", nodeY.value);
-                equals("x", nodeY.previous.value);
-                equals("z", nodeY.next.value);
+                expect(3);
+                equals("y", nodeY.getValue());
+                equals("x", nodeY.getPrevious().getValue());
+                equals("z", nodeY.getNext().getValue());
             });
 
             test("it is possible to add a node after another node, by value", function () {
@@ -98,32 +110,43 @@
                 ll.add("x").add("y");
                 var newNode = ll.insertAfter("x", "new value");
                 equals(3, ll.size());
-                equals("new value", ll.findByValue("x").next.value);
-                equals("new value", ll.findByValue("y").previous.value);
+                equals("new value", ll.findByValue("x").getNext().getValue());
+                equals("new value", ll.findByValue("y").getPrevious().getValue());
             });
 
             test("it is possible to add a node after another node, by value, on a list with 1 node", function () {
                 var ll = new LinkedList();
                 ll.add("x");
                 var newNode = ll.insertAfter("x", "new value");
+                expect(3);
                 equals(2, ll.size());
-                equals("x", newNode.previous.value);
-                equals(null, newNode.next);
+                equals("x", newNode.getPrevious().getValue());
+                equals(null, newNode.getNext());
             });
 
             test("it is possible to iterate over a linked list", function () {
                 var ll = new LinkedList();
                 ll.add("x").add("y").add("z");
                 var iteration = 0;
-                for (var n = ll.getHead(); n; n = n.next) {
+                expect(3);
+                for (var n = ll.getHead(); n; n = n.getNext()) {
                     if (iteration == 0)
-                        equals("x", n.value);
+                        equals("x", n.getValue());
                     if (iteration == 1)
-                        equals("y", n.value);
+                        equals("y", n.getValue());
                     if (iteration == 2)
-                        equals("z", n.value);
+                        equals("z", n.getValue());
                     iteration++;
                 }
+            });
+
+            test("node returned by findByNome is read-only", function () {
+                var ll = new LinkedList();
+                ll.add("x").add("y").add("z");
+                var node = ll.findByValue("z");
+                expect(2);
+                ok(typeof (node.setNext) == "undefined");
+                ok(typeof (node.setPrevious) == "undefined");
             });
 
         });

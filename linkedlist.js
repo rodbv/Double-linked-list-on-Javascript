@@ -4,16 +4,48 @@
     }
 
     //private members
-    var _nodes = [], 
-        _head = null, 
+    var _nodes = [],
+        _head = null,
         _tail = null;
 
-    //public members
     function Node(value) {
-        this.previous = null,
-        this.next = null,
-        this.value = value;
+        var _previous = null,
+            _next = null,
+            _value = value;
+
+        this.getNext = function () {
+            return _next;
+        };
+        this.setNext = function (node) {
+            _next = node
+        };
+        this.getPrevious = function () {
+            return _previous;
+        };
+        this.setPrevious = function (node) {
+            _previous = node;
+        };
+        this.getValue = function () {
+            return _value;
+        }
+        this.asReadOnlyNode = function () {
+            return {
+                getValue: this.getValue,
+                getPrevious: this.getPrevious,
+                getNext: this.getNext
+            };
+        }
     }
+
+    function _findByValue(value) {
+        for (var i = 0, len = _nodes.length; i < len; i++) {
+            if (_nodes[i].getValue() == value)
+                return _nodes[i];
+        }
+        return null;
+    }
+
+    //public members
 
     this.size = function () {
         return _nodes.length;
@@ -22,8 +54,8 @@
     this.add = function (val) {
         var newNode = new Node(val);
         if (_tail != null) {
-            newNode.previous = _tail;
-            _tail.next = newNode;
+            newNode.setPrevious(_tail);
+            _tail.setNext(newNode);
         }
         _tail = newNode;
 
@@ -35,36 +67,40 @@
     }
 
     this.getHead = function () {
-        return _head;
+        return _head.asReadOnlyNode();
     }
 
     this.getTail = function () {
-        return _tail;
+        return _tail.asReadOnlyNode();
     }
 
     this.findByValue = function (value) {
-        for (var i = 0, len = _nodes.length; i < len; i++) {
-            if (_nodes[i].value == value)
-                return _nodes[i];
-        }
+        var node = _findByValue(value);
+        if (node)
+            return node.asReadOnlyNode();
         return null;
     }
 
     this.insertAfter = function (value, newValue) {
-        var prevNode = this.findByValue(value);
+        var prevNode = _findByValue(value),
+            nextNode,
+            newNode;
+
         if (prevNode == null)
             return null;
-        var newNode = new Node(newValue);
 
-        newNode.next = prevNode.next;
-        newNode.previous = prevNode;
-        newNode.previous.next = newNode;
+        newNode = new Node(newValue);
 
-        if (newNode.next != null)
-            newNode.next.previous = newNode;
+        nextNode = prevNode.getNext();
+        newNode.setNext(nextNode);
+        newNode.setPrevious(prevNode);
+        prevNode.setNext(newNode);
+
+        if (nextNode != null)
+            nextNode.setPrevious(newNode);
 
         _nodes.push(newNode);
-        return newNode;
+        return newNode.asReadOnlyNode();
     }
 
 }
