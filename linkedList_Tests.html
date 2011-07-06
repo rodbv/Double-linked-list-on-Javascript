@@ -152,6 +152,15 @@
                 ok(typeof (node.getValue) == "function");
             });
 
+            test("node.getNext should return a read-only node", function () {
+                var ll = new LinkedList();
+                ll.add("x").add("y");
+                var node = ll.findByValue("x");
+                var nextNode = node.getNext();
+                expect(1);
+                ok(typeof (nextNode.setNext) == "undefined");
+            });
+
         });
     </script>
 </head>

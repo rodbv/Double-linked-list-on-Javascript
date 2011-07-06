@@ -30,9 +30,15 @@
         }
         this.asReadOnlyNode = function () {
             return {
-                getValue: this.getValue,
-                getPrevious: this.getPrevious,
-                getNext: this.getNext
+                getValue: function () {
+                    return _value;
+                },
+                getPrevious: function () {
+                    return _previous == null ? null : _previous.asReadOnlyNode();
+                },
+                getNext: function () {
+                    return _next == null ? null : _next.asReadOnlyNode();
+                }
             };
         }
     }
