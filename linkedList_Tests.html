@@ -144,9 +144,12 @@
                 var ll = new LinkedList();
                 ll.add("x").add("y").add("z");
                 var node = ll.findByValue("z");
-                expect(2);
+                expect(5);
                 ok(typeof (node.setNext) == "undefined");
                 ok(typeof (node.setPrevious) == "undefined");
+                ok(typeof (node.getNext) == "function");
+                ok(typeof (node.getPrevious) == "function");
+                ok(typeof (node.getValue) == "function");
             });
 
         });
