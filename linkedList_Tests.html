@@ -101,7 +101,7 @@
                 equals("new value", ll.findByValue("x").next.value);
                 equals("new value", ll.findByValue("y").previous.value);
             });
-            
+
             test("it is possible to add a node after another node, by value, on a list with 1 node", function () {
                 var ll = new LinkedList();
                 ll.add("x");
@@ -109,6 +109,21 @@
                 equals(2, ll.size());
                 equals("x", newNode.previous.value);
                 equals(null, newNode.next);
+            });
+
+            test("it is possible to iterate over a linked list", function () {
+                var ll = new LinkedList();
+                ll.add("x").add("y").add("z");
+                var iteration = 0;
+                for (var n = ll.getHead(); n; n = n.next) {
+                    if (iteration == 0)
+                        equals("x", n.value);
+                    if (iteration == 1)
+                        equals("y", n.value);
+                    if (iteration == 2)
+                        equals("z", n.value);
+                    iteration++;
+                }
             });
 
         });
